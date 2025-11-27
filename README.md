@@ -62,31 +62,6 @@ The entire app is displayed inside a phone-frame to simulate a mobile TikTok exp
 
 ---
 
-##  Project Structure
-│
-├── public/
-├── src/
-│ ├── components/
-│ │ ├── TopNavbar.jsx
-│ │ ├── BottomNavbar.jsx
-│ │ ├── VideoCard.jsx
-│ │ ├── FooterLeft.jsx
-│ │ ├── FooterRight.jsx
-│ │
-│ ├── videos/
-│ │ ├── video1.mp4
-│ │ ├── video2.mp4
-│ │ ├── video3.mp4
-│ │ ├── video4.mp4
-│ │
-│ ├── App.jsx
-│ ├── App.css
-│ └── index.js
-│
-└── README.md
-
----
-
 ##  How to Run
 
 ### 1. Install dependencies  
