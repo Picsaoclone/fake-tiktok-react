@@ -98,14 +98,6 @@ All videos located under `/src/videos/`
 
 ---
 
-##  Author  
-**Picsaoclone**  
-GitHub: https://github.com/Picsaoclone
-
----
-
-##  If you like this project  
-Please  star the repo — it helps a lot!
 
 
 
