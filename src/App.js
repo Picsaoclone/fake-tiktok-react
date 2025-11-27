@@ -1,129 +1,282 @@
 import React, { useEffect, useState, useRef } from 'react';
-import './App.css';
+import TopNavbar from './components/TopNavbar';
 import VideoCard from './components/VideoCard';
 import BottomNavbar from './components/BottomNavbar';
-import TopNavbar from './components/TopNavbar';
+import './App.css';
 
-// This array holds information about different videos
+// Danh sách video
 const videoUrls = [
   {
     url: require('./videos/video1.mp4'),
-    profilePic: 'https://p16-sign-useast2a.tiktokcdn.com/tos-useast2a-avt-0068-giso/9d429ac49d6d18de6ebd2a3fb1f39269~c5_100x100.jpeg?x-expires=1688479200&x-signature=pjH5pwSS8Sg1dJqbB1GdCLXH6ew%3D',
+    profilePic:
+      'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg',
     username: 'csjackie',
-    description: 'Lol nvm #compsci #chatgpt #ai #openai #techtok',
+    description: 'Lol nvm #compsci #chatgpt #ai #opena #tiktok',
     song: 'Original sound - Famed Flames',
     likes: 430,
     comments: 13,
     saves: 23,
-    shares: 1,
+    shares: 12,
   },
   {
     url: require('./videos/video2.mp4'),
-    profilePic: 'https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/eace3ee69abac57c39178451800db9d5~c5_100x100.jpeg?x-expires=1688479200&x-signature=wAkVmwL7lej15%2B16ypSWQOqTP8s%3D',
-    username: 'dailydotdev',
-    description: 'Every developer brain @francesco.ciulla #developerjokes #programming #programminghumor #programmingmemes',
-    song: 'tarawarolin wants you to know this isnt my sound - Chaplain J Rob',
-    likes: '13.4K',
-    comments: 3121,
-    saves: 254,
-    shares: 420,
+    profilePic:
+      'https://images.pexels.com/photos/712521/pexels-photo-712521.jpeg',
+    username: 'faruktutkus',
+    description:
+      'Wait for the end | Im RTX 4090 TI #softwareengineer #codinglife #codingmemes',
+    song: '5s - Computer Science',
+    likes: '9.6K',
+    comments: 230,
+    saves: 967,
+    shares: 1037,
   },
+
+  // ============================
+  // VIDEO 3
+  // ============================
   {
     url: require('./videos/video3.mp4'),
-    profilePic: 'https://p77-sign-va.tiktokcdn.com/tos-maliva-avt-0068/4e6698b235eadcd5d989a665704daf68~c5_100x100.jpeg?x-expires=1688479200&x-signature=wkwHDKfNuIDqIVHNm29%2FRf40R3w%3D',
-    username: 'wojciechtrefon',
-    description: '#programming #softwareengineer #vscode #programmerhumor #programmingmemes',
-    song: 'help so many people are using my sound - Ezra',
-    likes: 5438,
-    comments: 238,
-    saves: 12,
-    shares: 117,
+    profilePic:
+      'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg',
+    username: 'anniedance',
+    description: 'funny #VScode',
+    song: 'Beat Drop - DJ Remix',
+    likes: '1.2M',
+    comments: '45.5K',
+    saves: '12.3K',
+    shares: '8.9K',
   },
+
+  // ============================
+  // VIDEO 4
+  // ============================
   {
     url: require('./videos/video4.mp4'),
-    profilePic: 'https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/4bda52cf3ad31c728153859262c329db~c5_100x100.jpeg?x-expires=1688486400&x-signature=ssUbbCpZFJj6uj33D%2BgtcqxMvgQ%3D',
-    username: 'faruktutkus',
-    description: 'Wait for the end | Im RTX 4090 TI | #softwareengineer #softwareengineer #coding #codinglife #codingmemes ',
-    song: 'orijinal ses - Computer Science',
-    likes: 9689,
-    comments: 230,
-    saves: 1037,
-    shares: 967,
+    profilePic:
+      'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
+    username: 'SupaR',
+    description: 'Wait for the end | Im RTX 4090 TI | #softwareegineer #coding #codinglife #codingmemes',
+    song: 'Tropical Vibes - Chill Mix',
+    likes: '325K',
+    comments: '12.1K',
+    saves: '8.4K',
+    shares: '4.2K',
   },
 ];
+
 
 function App() {
   const [videos, setVideos] = useState([]);
   const videoRefs = useRef([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // search
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // share popup
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareVideo, setShareVideo] = useState(null);
+
+  // EXERCISE 5 — SHOW INFO
+  const [showInfo, setShowInfo] = useState(false);
+  const [info, setInfo] = useState(null);
 
   useEffect(() => {
     setVideos(videoUrls);
   }, []);
 
+  // IntersectionObserver
   useEffect(() => {
     const observerOptions = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.8, // Adjust this value to change the scroll trigger point
+      threshold: 0.8,
     };
 
-    // This function handles the intersection of videos
     const handleIntersection = (entries) => {
       entries.forEach((entry) => {
+        const videoElement = entry.target;
         if (entry.isIntersecting) {
-          const videoElement = entry.target;
           videoElement.play();
+
+          const index = videoRefs.current.indexOf(videoElement);
+          if (index !== -1) {
+            const v = videos[index];
+            setActiveIndex(index);
+
+            // cập nhật info
+            setInfo({
+              username: v.username,
+              song: v.song,
+              likes: v.likes,
+              comments: v.comments,
+            });
+          }
         } else {
-          const videoElement = entry.target;
           videoElement.pause();
         }
       });
     };
 
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      observerOptions
+    );
 
-    // We observe each video reference to trigger play/pause
     videoRefs.current.forEach((videoRef) => {
-      observer.observe(videoRef);
+      if (videoRef) observer.observe(videoRef);
     });
 
-    // We disconnect the observer when the component is unmounted
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [videos]);
 
-  // This function handles the reference of each video
   const handleVideoRef = (index) => (ref) => {
     videoRefs.current[index] = ref;
   };
 
+  const goToIndex = (index) => {
+    if (index < 0 || index >= videos.length) return;
+    setActiveIndex(index);
+
+    const ref = videoRefs.current[index];
+    if (ref) {
+      ref.scrollIntoView({ behavior: 'smooth' });
+
+      setShowInfo(true);
+      setTimeout(() => setShowInfo(false), 2500);
+    }
+  };
+
+  const goNext = () => goToIndex(activeIndex + 1);
+  const goPrev = () => goToIndex(activeIndex - 1);
+
+  // PHÍM RIGHT → EXERCISE 5
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        goNext();
+
+        // hiện info overlay
+        setShowInfo(true);
+        setTimeout(() => setShowInfo(false), 2500);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
+
+  // SEARCH
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) {
+      setVideos(videoUrls);
+      setActiveIndex(0);
+      return;
+    }
+    const filtered = videoUrls.filter((v) =>
+      v.description.toLowerCase().includes(term)
+    );
+    setVideos(filtered);
+    setActiveIndex(0);
+
+    setTimeout(() => goToIndex(0), 0);
+  };
+
+  // copy URL khi Save
+  const handleSaveUrl = async (url) => {
+    try {
+      await navigator.clipboard.writeText(String(url));
+      console.log('Copied url:', url);
+    } catch (err) {
+      console.error('Cannot copy to clipboard', err);
+    }
+  };
+
+  // share popup
+  const handleShare = (video) => {
+    setShareVideo(video);
+    setShareOpen(true);
+  };
+
+  const closeShare = () => {
+    setShareOpen(false);
+    setShareVideo(null);
+  };
+
   return (
     <div className="app">
-      <div className="container">
-        <TopNavbar className="top-navbar" />
-        {/* Here we map over the videos array and create VideoCard components */}
-        {videos.map((video, index) => (
-          <VideoCard
-            key={index}
-            username={video.username}
-            description={video.description}
-            song={video.song}
-            likes={video.likes}
-            saves={video.saves}
-            comments={video.comments}
-            shares={video.shares}
-            url={video.url}
-            profilePic={video.profilePic}
-            setVideoRef={handleVideoRef(index)}
-            autoplay={index === 0}
-          />
-        ))}
-        <BottomNavbar className="bottom-navbar" />
+      <div className="phone-frame">
+
+        <TopNavbar
+          searchVisible={searchVisible}
+          searchTerm={searchTerm}
+          onToggleSearch={() => setSearchVisible((v) => !v)}
+          onSearchTermChange={setSearchTerm}
+          onSearchSubmit={handleSearchSubmit}
+        />
+
+        {/* EXERCISE 5 — OVERLAY INFO */}
+        {showInfo && info && (
+          <div className="video-info-overlay show">
+            <p><strong>@{info.username}</strong></p>
+            <p>{info.song}</p>
+            <p>❤️ {info.likes}   💬 {info.comments}</p>
+          </div>
+        )}
+
+        {/* Video scrolling */}
+        <div className="video-list">
+          {videos.map((video, index) => (
+            <VideoCard
+              key={index}
+              url={video.url}
+              username={video.username}
+              description={video.description}
+              song={video.song}
+              likes={video.likes}
+              comments={video.comments}
+              saves={video.saves}
+              shares={video.shares}
+              profilePic={video.profilePic}
+              setVideoRef={handleVideoRef(index)}
+              autoplay={index === 0}
+              onSwipeUp={goNext}
+              onSwipeDown={goPrev}
+              onShare={() => handleShare(video)}
+              onSave={handleSaveUrl}
+            />
+          ))}
+        </div>
+
+        <BottomNavbar />
+
+        {/* Share popup */}
+        {shareOpen && (
+          <div className="share-overlay">
+            <div className="share-popup">
+              <button className="close-btn" onClick={closeShare}>
+                ×
+              </button>
+              <h3>Share</h3>
+              {shareVideo && (
+                <>
+                  <p>@{shareVideo.username}</p>
+                  <ul>
+                    <li>Facebook</li>
+                    <li>Instagram</li>
+                    <li>Threads</li>
+                  </ul>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
-  
 }
 
 export default App;

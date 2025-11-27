@@ -1,0 +1,38 @@
+.top-navbar-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+
+.top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+}
+
+.top-navbar h2 {
+  color: white;
+  font-size: 14px;
+}
+
+.top-navbar span {
+  font-weight: 700;
+}
+
+.icon {
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.search-form input {
+  width: 90%;
+  margin: 6px auto;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
